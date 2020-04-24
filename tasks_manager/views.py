@@ -5,23 +5,26 @@ from .models import TodoItem
 
 
 def index(request):
-    return HttpResponse("Примитивный ответ из приложения tasks_manager")
+    return HttpResponse("Примитивный ответ из приложения tasks")
 
 
 def tasks_list(request):
     all_tasks = TodoItem.objects.all()
     return render(
         request,
-        'tasks_manager/list.html',
+        'tasks/list.html',
         {'tasks': all_tasks}
     )
 
 
 def complete_task(request, uid):
-
+    item = TodoItem.objects.get(id=uid)
+    item.is_completed = not item.is_completed
+    item.save()
     return HttpResponse('OK')
 
 
 def delete_task(request, uid):
-
-    return redirect('/tasks_manager/list')
+    item = TodoItem.objects.get(id=uid)
+    item.delete()
+    return redirect('/tasks/list')
