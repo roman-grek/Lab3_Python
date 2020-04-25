@@ -1,21 +1,33 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
+from django.views import View
+from django.views.generic import ListView
 
 from .models import TodoItem
 from .forms import AddTaskForm, TodoItemForm
 
 
-def index(request):
-    return HttpResponse("Примитивный ответ из приложения tasks")
+class TaskListView(ListView):
+    queryset = TodoItem.objects.all()
+    context_object_name = 'tasks'
+    template_name = 'tasks/list.html'
 
 
-def tasks_list(request):
-    all_tasks = TodoItem.objects.all()
-    return render(
-        request,
-        'tasks/list.html',
-        {'tasks': all_tasks}
-    )
+class TaskCreateView(View):
+    def create_render(self, request, form):
+        return render(request, "tasks/create.html", {"form": form})
+
+    def post(self, request, *args, **kwargs):
+        form = TodoItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/tasks/list")
+
+        return self.create_render(request, form)
+
+    def get(self, request, *args, **kwargs):
+        form = TodoItemForm()
+        return self.create_render(request, form)
 
 
 def complete_task(request, uid):
@@ -23,26 +35,6 @@ def complete_task(request, uid):
     item.is_completed = not item.is_completed
     item.save()
     return HttpResponse('OK')
-
-
-def add_task(request):
-    if request.method == 'POST':
-        desc = request.POST['description']
-        item = TodoItem(description=desc)
-        item.save()
-    return redirect("/tasks/list")
-
-
-def create_task(request):
-    if request.method == 'POST':
-        form = TodoItemForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("/tasks/list")
-    else:
-        form = TodoItemForm()
-
-    return render(request, "tasks/create.html", {'form': form})
 
 
 def delete_task(request, uid):
