@@ -6,6 +6,7 @@ from . import views
 app_name = 'tasks'
 
 urlpatterns = [
+    path('', views.index, name='index'),
     path('list/', views.TaskListView.as_view(), name='list'),
     path('complete/<int:uid>', views.complete_task, name='complete'),
     path("add-task/", views.add_task, name="api-add-task"),
