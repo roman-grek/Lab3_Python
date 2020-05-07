@@ -1,4 +1,3 @@
-
 .container {
   margin: 0 auto;
   min-width: 500px;
@@ -53,6 +52,7 @@ input[type="checkbox"] { width: 30px; }
 .remove {
   float: right;
   cursor: pointer;
+  : red;
 }
 
 .completed { text-decoration: line-through; }

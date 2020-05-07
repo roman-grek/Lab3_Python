@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Просмотр таблицы{% endblock %}
+
+{% block extra_head %}
+    <script src="{% static 'js/tasks.js' %}"></script>
+{% endblock %}
+
+{% block main_content %}
+    <h1>Текущие задачи</h1>
+    <ul id="todo-list" class="list-group">
+        {% for task in tasks %}
+            {% if task.is_completed %}
+                <li class="completed list-group-item">
+                <input class='checkbox' data-uid={{ task.id }} type='checkbox'
+                           disabled='disabled' checked='checked'/>
+            {% else %}
+                <li class="list-group-item">
+                <input class='checkbox' data-uid={{ task.id }} type='checkbox'/>
+            {% endif %}
+        <a href="{% url "tasks:details" task.id %}">{{ task }}</a>
+        <a class="remove" href="{% url "tasks:delete" task.id %}">X</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
