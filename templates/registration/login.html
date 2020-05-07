@@ -1,19 +1,23 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Вход в аккаунт{% endblock %}
 
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
 {% block main_content %}
-    <h1>Вход</h1>
     {% if form.errors %}
-        <p>Ошибка: пароль или логин неправильные. Попробуйте снова</p>
+        <p class="h3 mb-3 font-weight-normal">Ошибка: пароль или логин неправильные. Попробуйте снова</p>
     {% else %}
-        <p>Введите логин и пароль:</p>
+        <p class="h3 mb-3 font-weight-normal">Введите логин и пароль:</p>
     {% endif %}
-    <form action="." method="POST" class="login">
+    <form action="." method="POST" class="form-signin">
         {{ form.as_p }}
         {% csrf_token %}
         <input type="hidden" name="text" value="{{ next }}"/>
-        <button type="submit">Войти</button>
+        <button type="submit" class="btn btn-lg btn-primary btn-block">Войти</button>
         <a href="{% url "register" %}">Зарегистрироваться</a>
     </form>
 {% endblock %}

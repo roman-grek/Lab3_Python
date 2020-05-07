@@ -19,17 +19,17 @@
     <div class="container">
         <div class="row">
 
-            <div class="side_bar col">
+            <div class="sidebar col-md-3">
                 {% block side_bar %}
                     {% if user.is_authenticated %}
-                        <p>{{ user.first_name }}</p>
                         <img src="{{ user.profile.avatar.url }}" class="img-fluid">
 
-                        <ul>
-                            <li><a href="#">Профиль</a></li>
-                            <li><a href="{% url "tasks:create-table" %}">Создать таблицу</a></li>
-                            <li><a href="{% url "tasks:list" %}">Таблицы</a></li>
-                            <li><a href="{% url "logout" %}">Выйти</a></li>
+                        <ul class="list-group">
+                            <li class="list-group-item">{{ user.first_name }} {{ user.last_name }}</li>
+                            <li class="list-group-item"><a href="{% url "edit" %}">Профиль</a></li>
+                            <li class="list-group-item"><a href="{% url "tasks:create-table" %}">Создать таблицу</a></li>
+                            <li class="list-group-item"><a href="{% url "tasks:list" %}">Таблицы</a></li>
+                            <li class="list-group-item"><a href="{% url "logout" %}">Выйти</a></li>
                         </ul>
                     {% endif %}
                 {% endblock %}

@@ -3,12 +3,11 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import TodoItem, TodoTable
-from .forms import AddTaskForm, TodoItemForm, TodoTableForm
+from .forms import TodoItemForm, TodoTableForm
 
 
 class TaskListView(LoginRequiredMixin, ListView):

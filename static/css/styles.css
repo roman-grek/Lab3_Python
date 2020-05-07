@@ -52,7 +52,9 @@ input[type="checkbox"] { width: 30px; }
 .remove {
   float: right;
   cursor: pointer;
-  : red;
+  color: red;
 }
 
 .completed { text-decoration: line-through; }
+
+.top-buffer { margin-top:20px; }
