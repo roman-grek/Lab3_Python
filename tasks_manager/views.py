@@ -6,8 +6,8 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import TodoItem, TodoTable
-from .forms import TodoItemForm, TodoTableForm
+from .models import TodoItem, TodoTable, Comment
+from .forms import TodoItemForm, TodoTableForm, CommentForm
 
 
 class TaskListView(LoginRequiredMixin, ListView):
@@ -23,7 +23,8 @@ class TaskListView(LoginRequiredMixin, ListView):
 def table_by_id(request, uid):
     table = TodoTable.objects.get(id=uid)
     items = TodoItem.objects.filter(table=table)
-    return render(request, "tasks/table.html", {"tasks": items})
+    return render(request, "tasks/table.html",
+                  {"table": table, "tasks": items})
 
 
 class TaskCreateView(View):
@@ -36,7 +37,7 @@ class TaskCreateView(View):
             new_task = form.save(commit=False)
             new_task.owner = request.user
             new_task.save()
-            return redirect('tasks:list')
+            return redirect('tasks:table', uid=new_task.table.id)
 
         return self.create_render(request, form)
 
@@ -80,7 +81,7 @@ def delete_task(request, uid):
     item = TodoItem.objects.get(id=uid)
     table_id = item.table.id
     item.delete()
-    return redirect('tasks:list')
+    return redirect('tasks:table', uid=table_id)
 
 
 def delete_table(request, uid):
@@ -89,9 +90,22 @@ def delete_table(request, uid):
     return redirect('tasks:list')
 
 
-def add_task(request):
+def delete_comment(request, uid):
+    item = Comment.objects.get(id=uid)
+    table_id = item.table.id
+    item.delete()
+    return redirect('tasks:table', uid=table_id)
+
+
+def add_comment(request, uid):
+    table = TodoTable.objects.get(id=uid)
     if request.method == "POST":
-        desc = request.POST["description"]
-        t = TodoItem(description=desc)
-        t.save()
-    return redirect("tasks:list")
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.table = table
+            comment.save()
+            return redirect('tasks:table', uid=table.id)
+    else:
+        form = CommentForm()
+    return render(request, 'tasks/add-comment.html', {'form': form})

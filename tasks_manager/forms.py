@@ -1,10 +1,6 @@
 from django import forms
 
-from .models import TodoItem, TodoTable
-
-
-class AddTaskForm(forms.Form):
-    description = forms.CharField(max_length=64, label='')
+from .models import TodoItem, TodoTable, Comment
 
 
 class TodoItemForm(forms.ModelForm):
@@ -17,5 +13,11 @@ class TodoItemForm(forms.ModelForm):
 class TodoTableForm(forms.ModelForm):
     class Meta:
         model = TodoTable
-        fields = ('title',)
+        fields = ('title', 'category',)
         labels = {'title': ''}
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ('text',)

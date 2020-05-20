@@ -9,6 +9,9 @@
 
 {% block main_content %}
     <h1>Текущие задачи</h1>
+    {% if table.category %}
+        <h2>{{ table.category.title }}</h2>
+    {% endif %}
     <ul id="todo-list" class="list-group">
         {% for task in tasks %}
             {% if task.is_completed %}
@@ -25,4 +28,19 @@
         {% endfor %}
     </ul>
     <a href="{% url "tasks:create" %}" type="button" class="btn btn-primary top-buffer">Добавить задачу</a>
+    <hr>
+    <h2>Комментарии</h2>
+    <ul>
+    {% for comment in table.comments.all %}
+        <li class="list-group-item">
+            <div class="date">{{ comment.created }}</div>
+            <a class="remove" href="{% url "tasks:delete_comment" comment.id %}">X</a>
+            <p>{{ comment.text|linebreaks }}</p>
+
+        </li>
+    {% empty %}
+        <p>Комментариев пока нет</p>
+    {% endfor %}
+    </ul>
+    <a class="btn btn-primary" href="{% url 'tasks:add_comment' table.id %}">Добавить комментарий</a>
 {% endblock %}

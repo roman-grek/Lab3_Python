@@ -3,10 +3,27 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 
 
+class Category(models.Model):
+    slug = models.CharField(max_length=20)
+    title = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name_plural = "categories"
+
+    def __str__(self):
+        return self.slug
+
+
 class TodoTable(models.Model):
     title = models.CharField(max_length=30)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
     owner = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -47,3 +64,11 @@ class TodoItem(models.Model):
     class Meta:
         ordering = ('-created',)
 
+
+class Comment(models.Model):
+    table = models.ForeignKey(TodoTable, on_delete=models.CASCADE, related_name='comments')
+    text = models.CharField('Текст комментария', max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text
