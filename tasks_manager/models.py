@@ -9,6 +9,7 @@ class Category(models.Model):
 
     class Meta:
         verbose_name_plural = "categories"
+        indexes = [models.Index(fields=['-slug'])]
 
     def __str__(self):
         return self.slug
@@ -32,6 +33,7 @@ class TodoTable(models.Model):
 
     class Meta:
         ordering = ('-created',)
+        indexes = [models.Index(fields=['-created'])]
 
     def __str__(self):
         return self.title
@@ -63,6 +65,7 @@ class TodoItem(models.Model):
 
     class Meta:
         ordering = ('-created',)
+        indexes = [models.Index(fields=['-created'])]
 
 
 class Comment(models.Model):

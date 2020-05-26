@@ -17,11 +17,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from accounts import views as accounts_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('tasks_manager.urls', namespace='tasks')),
     path('accounts/', include('accounts.urls')),
+    path('activate/<uidb64>/<token>', accounts_views.activate, name='activate'),
+    path('send/<int:user_id>/', accounts_views.send, name='admin_email_message'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

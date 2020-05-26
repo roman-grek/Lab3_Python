@@ -1,0 +1,14 @@
+{% autoescape off %}
+    <div class="col-md-4">
+      <div class="content-section">
+        <h1>Важное</h1>
+        <h1>Здравствуйте, {{ user.username }}</h1>
+        <ul class="list-group">
+          <li class="list-group-item list-group-item-light">Вы зарегистрировались на нашем сайте в {{ time }} с использованием {{ user.email }}</li>
+          <li class="list-group-item list-group-item-light">Кликните на ссылку, чтобы подтвердить вашу регистрацию: http://{{ domain }}{% url 'activate' uidb64=uid token=token %}</li>
+          <li class="list-group-item list-group-item-light">Если это были не вы, просто проигнорируйте это сообщение.</li>
+        </ul>
+        <a href="http://{{ domain }}{% url 'activate' uidb64=uid token=token %}"><button class="btn btn-outline-danger" type="submit">Да, подтверждаю</button></a>
+      </div>
+    </div>
+{% endautoescape %}

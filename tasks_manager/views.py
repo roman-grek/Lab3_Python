@@ -3,11 +3,14 @@ from django.http import HttpResponse
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+import logging
 
 from .models import TodoItem, TodoTable, Comment
 from .forms import TodoItemForm, TodoTableForm, CommentForm
+
+
+logger = logging.getLogger(__name__)
 
 
 class TaskListView(LoginRequiredMixin, ListView):
@@ -80,12 +83,14 @@ def complete_task(request, uid):
 def delete_task(request, uid):
     item = TodoItem.objects.get(id=uid)
     table_id = item.table.id
+    logger.debug('Task deleted: ' + item.description)
     item.delete()
     return redirect('tasks:table', uid=table_id)
 
 
 def delete_table(request, uid):
     item = TodoTable.objects.get(id=uid)
+    logger.debug('Table deleted: ' + item.title)
     item.delete()
     return redirect('tasks:list')
 
@@ -93,6 +98,7 @@ def delete_table(request, uid):
 def delete_comment(request, uid):
     item = Comment.objects.get(id=uid)
     table_id = item.table.id
+    logger.debug('Comment deleted: ' + item.text)
     item.delete()
     return redirect('tasks:table', uid=table_id)
 
