@@ -14,6 +14,6 @@ urlpatterns = [
     path('delete/<int:uid>', views.delete_task, name='delete'),
     path('delete-table/<int:uid>', views.delete_table, name='delete-table'),
     path('details/<int:pk>', views.TaskDetailsView.as_view(), name='details'),
-    path('table/<int:uid>/comment/', views.add_comment, name='add_comment'),
-    path('delete/comment/<int:uid>', views.delete_comment, name='delete_comment'),
+    path('table-comment/<int:uid>', views.add_comment, name='add_comment'),
+    path('delete-comment/<int:uid>', views.delete_comment, name='delete_comment'),
 ]
